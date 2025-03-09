@@ -10,7 +10,9 @@ class App
     public static void main( String[] args )
     {
         Producer rockstar = Producer.builder().name("Rockstar").build();
+        Producer producerToUpdate = Producer.builder().id(1).name("EA Games").build();
 //        ProducerService.save(rockstar);
-        ProducerService.delete(5);
+//        ProducerService.delete(5);
+        ProducerService.update(producerToUpdate);
     }
 }
