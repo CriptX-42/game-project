@@ -33,6 +33,7 @@ public class ProducerRepository {
         }  catch (SQLException e) {
             log.error("Erro ao tentar colocar a produtora '{}'", producer.getName(), e);
         }
+
     }
 
     public static List<Producer> findAll () {
@@ -63,5 +64,23 @@ public class ProducerRepository {
         }  catch (SQLException e) {
             log.error("Erro ao tentar excluir a produtora '{}'", id, e);
         }
+    }
+
+    public static List<Producer> findByName (String producerName) {
+        String sql = "SELECT * FROM game_store.producer WHERE name like '%s';".formatted("%" + producerName + "%");
+        List<Producer> producers = new ArrayList<>();
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Producer producer = Producer.builder().id(id).name(name).build();
+                producers.add(producer);
+            }
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar encontrar produtora", e);
+        }
+        return producers;
     }
 }

@@ -18,8 +18,11 @@ class App
 //        ProducerService.save(rockstar);
 //        ProducerService.delete(5);
 //        ProducerService.update(producerToUpdate);
-        List<Producer> producers = ProducerService.listProducer();
+//        List<Producer> producers = ProducerService.listProducer();
+//        log.info(producers);
+        List<Producer> producers = ProducerService.findByName("Rockstar");
         log.info(producers);
+
 
     }
 }

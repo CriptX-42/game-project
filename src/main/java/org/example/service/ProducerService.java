@@ -19,6 +19,10 @@ public class ProducerService {
         return ProducerRepository.findAll();
     }
 
+    public static List<Producer> findByName (String name) {
+        return ProducerRepository.findByName(name);
+    }
+
     public static void delete (Integer id) {
         requireValidId(id);
         ProducerRepository.delete(id);
