@@ -87,7 +87,6 @@ public class ProducerRepository {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             ResultSetMetaData metaData = rs.getMetaData();
-            rs.next();
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount ; i++) {
 
@@ -95,6 +94,36 @@ public class ProducerRepository {
                 log.info("Column name '{}'", metaData.getColumnName(i));
                 log.info("Column Size '{}'", metaData.getColumnDisplaySize(i));
                 log.info("Column Type '{}'", metaData.getColumnType(i));
+            }
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar mostrar o metadata", e);
+        }
+    }
+
+    public static void showDriverMetadata () {
+        String sql = "SELECT * FROM game_store.producer;";
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            DatabaseMetaData metaData = conn.getMetaData();
+
+            if(metaData.supportsResultSetType(ResultSet.TYPE_FORWARD_ONLY)) {
+                log.info("Supports TYPE_FORWARD_ONLY");
+                if(metaData.supportsResultSetConcurrency(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)) {
+                    log.info("Supports TYPE_FORWARD_ONLY && CONCUR_UPDATABLE");
+                }
+            }
+
+            if(metaData.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE)) {
+                log.info("Supports TYPE_SCROLL_INSENSITIVE");
+                if(metaData.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+                    log.info("Supports TYPE_SCROLL_INSENSITIVE && CONCUR_UPDATABLE");
+                }
+            }
+
+            if(metaData.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE)) {
+                log.info("Supports TYPE_SCROLL_SENSITIVE");
+                if(metaData.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+                    log.info("Supports TYPE_SCROLL_SENSITIVE && CONCUR_UPDATABLE");
+                }
             }
         }  catch (SQLException e) {
             log.error("Erro ao tentar mostrar o metadata", e);

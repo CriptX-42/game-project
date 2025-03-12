@@ -27,6 +27,10 @@ public class ProducerService {
         ProducerRepository.showProducerMetadata();
     }
 
+    public static void showDriverMetadata () {
+        ProducerRepository.showDriverMetadata();
+    }
+
     public static void delete (Integer id) {
         requireValidId(id);
         ProducerRepository.delete(id);

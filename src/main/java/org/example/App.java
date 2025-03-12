@@ -28,8 +28,9 @@ class App
 //        List<Producer> producers = ProducerService.findByName("Rockstar");
         // log.info(producers);
 
-        ProducerService.showProducerMetaData();
+//        ProducerService.showProducerMetaData();
 
+        ProducerService.showDriverMetadata();
 
     }
 }
