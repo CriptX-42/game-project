@@ -15,13 +15,20 @@ class App
     {
         Producer rockstar = Producer.builder().name("Rockstar").build();
         Producer producerToUpdate = Producer.builder().id(1).name("EA Games").build();
+//
 //        ProducerService.save(rockstar);
+//
 //        ProducerService.delete(5);
+//
 //        ProducerService.update(producerToUpdate);
+//
 //        List<Producer> producers = ProducerService.listProducer();
 //        log.info(producers);
-        List<Producer> producers = ProducerService.findByName("Rockstar");
-        log.info(producers);
+
+//        List<Producer> producers = ProducerService.findByName("Rockstar");
+        // log.info(producers);
+
+        ProducerService.showProducerMetaData();
 
 
     }

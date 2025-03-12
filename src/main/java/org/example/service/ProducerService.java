@@ -23,6 +23,10 @@ public class ProducerService {
         return ProducerRepository.findByName(name);
     }
 
+    public static void showProducerMetaData () {
+        ProducerRepository.showProducerMetadata();
+    }
+
     public static void delete (Integer id) {
         requireValidId(id);
         ProducerRepository.delete(id);
