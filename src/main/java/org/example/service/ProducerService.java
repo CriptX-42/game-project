@@ -31,6 +31,10 @@ public class ProducerService {
         ProducerRepository.showDriverMetadata();
     }
 
+    public static void showTypeScrollWorking () {
+        ProducerRepository.showTypeScrollWorking();
+    }
+
     public static void delete (Integer id) {
         requireValidId(id);
         ProducerRepository.delete(id);

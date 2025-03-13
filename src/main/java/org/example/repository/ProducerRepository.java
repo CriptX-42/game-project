@@ -129,4 +129,22 @@ public class ProducerRepository {
             log.error("Erro ao tentar mostrar o metadata", e);
         }
     }
+
+    public static void showTypeScrollWorking () {
+        String sql = "SELECT * FROM game_store.producer;";
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = statement.executeQuery(sql);
+
+            log.info("É a ultima linha? {}", rs.last());
+            log.info("Número da linha? {}", rs.getRow());
+            log.info( Producer.builder().id(rs.getInt("id")).name(rs.getString("name")).build());
+
+            log.info("É a ultima linha? {}", rs.absolute(2));
+            log.info("Número da linha? {}", rs.getRow());
+            log.info( Producer.builder().id(rs.getInt("id")).name(rs.getString("name")).build());
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar encontrar produtora", e);
+        }
+    }
 }
