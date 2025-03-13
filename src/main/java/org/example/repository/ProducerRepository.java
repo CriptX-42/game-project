@@ -147,4 +147,24 @@ public class ProducerRepository {
             log.error("Erro ao tentar encontrar produtora", e);
         }
     }
+
+    public static List<Producer> findByNameAndUpdateToUpperCase (String producerName) {
+        String sql = "SELECT * FROM game_store.producer WHERE name like '%s';".formatted("%" + producerName + "%");
+        List<Producer> producers = new ArrayList<>();
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                rs.updateString("name", rs.getString("name").toUpperCase());
+                rs.updateRow();
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Producer producer = Producer.builder().id(id).name(name).build();
+                producers.add(producer);
+            }
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar encontrar produtora", e);
+        }
+        return producers;
+    }
 }
