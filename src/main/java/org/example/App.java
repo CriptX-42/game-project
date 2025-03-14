@@ -32,9 +32,13 @@ class App
 
 //        ProducerService.showDriverMetadata();
 
-        List<Producer> rockstar1 = ProducerService.findByNameAndUpdateToUpperCase("Rockstar");
+//        List<Producer> rockstar1 = ProducerService.findByNameAndUpdateToUpperCase("Rockstar");
+//
+//         log.info("Produtoras encontradas '{}'", rockstar1);
 
-         log.info("Produtoras encontradas '{}'", rockstar1);
+        List<Producer> nintendo = ProducerService.findByNameAndInsertWhenNotFound("Nintendo");
+
+        log.info("Produtoras encontradas '{}'", nintendo);
 
     }
 }

@@ -39,6 +39,10 @@ public class ProducerService {
        return ProducerRepository.findByNameAndUpdateToUpperCase(name);
     }
 
+    public static List<Producer> findByNameAndInsertWhenNotFound (String name) {
+        return ProducerRepository.findByNameAndInsertWhenNotFound(name);
+    }
+
     public static void delete (Integer id) {
         requireValidId(id);
         ProducerRepository.delete(id);
