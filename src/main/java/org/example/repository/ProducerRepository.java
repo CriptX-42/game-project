@@ -192,4 +192,28 @@ public class ProducerRepository {
         }
         return producers;
     }
+
+    public static List<Producer> findByNameAndPreparedStatment (String producerName) {
+        String sql = "SELECT * FROM game_store.producer WHERE name like ?";
+        List<Producer> producers = new ArrayList<>();
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            PreparedStatement preparedStatement = createPreparedStatment(conn,sql,producerName);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Producer producer = Producer.builder().id(id).name(name).build();
+                producers.add(producer);
+            }
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar encontrar produtora", e);
+        }
+        return producers;
+    }
+
+    private static PreparedStatement createPreparedStatment(Connection connection, String sql, String name) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, String.format("%" +  name + "%"));
+        return preparedStatement;
+    }
 }
