@@ -222,6 +222,30 @@ public class ProducerRepository {
 
     }
 
+    public static List<Producer> findByNameAndPreparedCalleble (String producerName) {
+        List<Producer> producers = new ArrayList<>();
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            PreparedStatement preparedStatement = callablePreparedStatementFindByName(conn, producerName);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Producer producer = Producer.builder().id(id).name(name).build();
+                producers.add(producer);
+            }
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar encontrar produtora", e);
+        }
+        return producers;
+    }
+
+    private static CallableStatement callablePreparedStatementFindByName(Connection connection, String name) throws SQLException {
+        String sql = "CALL `game_store`.`sp_get_procedure_by_name`(?);";
+        CallableStatement callableStatement = connection.prepareCall(sql);
+        callableStatement.setString(1, String.format("%" +  name + "%"));
+        return callableStatement;
+    }
+
     private static PreparedStatement updatePreparedStatementQuery(Connection connection, Producer producer) throws SQLException {
         String sql = "UPDATE `game_store`.`producer` SET `name` = ? WHERE (`id` = ?);\n".formatted(producer.getName(), producer.getId());
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
