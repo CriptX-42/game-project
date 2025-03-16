@@ -4,6 +4,7 @@ import org.example.conn.ConnectionFactory;
 import org.example.dominio.Producer;
 import org.example.listener.CustomRowSetListener;
 
+import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.JdbcRowSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +38,6 @@ public class ProducerRepositoryRowSet {
 
     public static void updateJdbcRowSet(Producer producer) {
         String sql = "SELECT * FROM game_store.producer WHERE (`id` = ?);";
-        List<Producer> producers = new ArrayList<>();
         try(JdbcRowSet jrs = ConnectionFactory.getJdbcRowSet()) {
             jrs.addRowSetListener(new CustomRowSetListener());
             jrs.setCommand(sql);
@@ -46,6 +46,24 @@ public class ProducerRepositoryRowSet {
             if (!jrs.next()) return;
             jrs.updateString("name", producer.getName());
             jrs.updateRow();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static void updateJdbcCachedRowSet(Producer producer) {
+        String sql = "SELECT * FROM producer WHERE (`id` = ?);";
+        try(CachedRowSet cachedRowSet = ConnectionFactory.getJdbcCachedRowSet();
+            Connection connection = ConnectionFactory.getConnection()) {
+            connection.setAutoCommit(false);
+            cachedRowSet.setCommand(sql);
+            cachedRowSet.setInt(1, producer.getId());
+            cachedRowSet.execute(connection);
+            if (!cachedRowSet.next()) return;
+            cachedRowSet.updateString("name", producer.getName());
+            cachedRowSet.updateRow();
+            cachedRowSet.acceptChanges();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
