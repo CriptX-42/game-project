@@ -36,9 +36,12 @@ class App
 //
 //         log.info("Produtoras encontradas '{}'", rockstar1);
 
-        List<Producer> nintendo = ProducerService.findByNameAndInsertWhenNotFound("Nintendo");
+//        List<Producer> nintendo = ProducerService.findByNameAndInsertWhenNotFound("Nintendo");
+//
+//        log.info("Produtoras encontradas '{}'", nintendo);
 
-        log.info("Produtoras encontradas '{}'", nintendo);
+        Producer producerToUpdate2 = Producer.builder().id(2).name("EA Games").build();
+        ProducerService.updatePreparedStatement(producerToUpdate2);
 
     }
 }

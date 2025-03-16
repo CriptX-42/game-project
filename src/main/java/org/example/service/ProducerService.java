@@ -43,6 +43,10 @@ public class ProducerService {
         return ProducerRepository.findByNameAndInsertWhenNotFound(name);
     }
 
+    public static void updatePreparedStatement (Producer producer) {
+        ProducerRepository.updatePreparedStatement(producer);
+    }
+
     public static void delete (Integer id) {
         requireValidId(id);
         ProducerRepository.delete(id);

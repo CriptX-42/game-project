@@ -193,11 +193,11 @@ public class ProducerRepository {
         return producers;
     }
 
-    public static List<Producer> findByNameAndPreparedStatment (String producerName) {
+    public static List<Producer> findByNameAndPreparedStatement (String producerName) {
         String sql = "SELECT * FROM game_store.producer WHERE name like ?";
         List<Producer> producers = new ArrayList<>();
         try(Connection conn = ConnectionFactory.getConnection()) {
-            PreparedStatement preparedStatement = createPreparedStatment(conn,sql,producerName);
+            PreparedStatement preparedStatement = createPreparedStatement(conn,producerName);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -211,7 +211,27 @@ public class ProducerRepository {
         return producers;
     }
 
-    private static PreparedStatement createPreparedStatment(Connection connection, String sql, String name) throws SQLException {
+    public static void updatePreparedStatement (Producer producer) {
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            PreparedStatement preparedStatement = updatePreparedStatementQuery(conn, producer);
+            int linesAffected = preparedStatement.executeUpdate();
+            log.info("Linhas do banco afetadas por essa mudança, atualizando '{}' '{}'", linesAffected, producer.getId());
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar colocar a produtora '{}'", producer.getName(), e);
+        }
+
+    }
+
+    private static PreparedStatement updatePreparedStatementQuery(Connection connection, Producer producer) throws SQLException {
+        String sql = "UPDATE `game_store`.`producer` SET `name` = ? WHERE (`id` = ?);\n".formatted(producer.getName(), producer.getId());
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, producer.getName());
+        preparedStatement.setString(2, producer.getId().toString());
+        return preparedStatement;
+    }
+
+    private static PreparedStatement createPreparedStatement(Connection connection, String name) throws SQLException {
+        String sql = "SELECT * FROM game_store.producer WHERE name like ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, String.format("%" +  name + "%"));
         return preparedStatement;
