@@ -6,6 +6,7 @@ import org.example.dominio.Producer;
 import org.example.repository.ProducerRepository;
 import org.example.service.ProducerService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -40,8 +41,11 @@ class App
 //
 //        log.info("Produtoras encontradas '{}'", nintendo);
 
-        Producer producerToUpdate2 = Producer.builder().id(2).name("EA Games").build();
-        ProducerService.updatePreparedStatement(producerToUpdate2);
+//        Producer producerToUpdate2 = Producer.builder().id(2).name("EA Games").build();
+//        ProducerService.updatePreparedStatement(producerToUpdate2);
+
+
+
 
     }
 }

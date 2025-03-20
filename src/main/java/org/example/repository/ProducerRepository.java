@@ -21,6 +21,34 @@ public class ProducerRepository {
         }
     }
 
+    public static void saveTransaction (List<Producer> producer) {
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            conn.setAutoCommit(false);
+            updatePreparedStatementSaveTransaction(conn, producer);
+            conn.commit();
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar colocar a produtora '{}'", e);
+        }
+    }
+
+    private static void updatePreparedStatementSaveTransaction(Connection connection, List<Producer> producers) throws SQLException {
+        String sql = "INSERT INTO `game_store`.`producer` (`name`) VALUES ( ? );";
+        boolean shouldRollback = false;
+        for (Producer producer: producers) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, producer.getName());
+                ps.execute();
+            }catch (SQLException e) {
+                e.printStackTrace();
+                shouldRollback = true;
+            }
+        }
+        if(shouldRollback) {
+            log.error("Transaction sofreu um rollback");
+            connection.rollback();
+        }
+    }
+
     public static void update (Producer producer) {
         String sql = "UPDATE `game_store`.`producer` SET `name` = '%s' WHERE (`id` = '%d');\n".formatted(producer.getName(), producer.getId());
         try(Connection conn = ConnectionFactory.getConnection()) {
