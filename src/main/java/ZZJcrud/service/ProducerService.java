@@ -19,6 +19,7 @@ public class ProducerService {
         switch (option) {
             case 1: findByName(); break;
             case 2: delete();
+            case 3: save();
             default:
                 throw new IllegalArgumentException("Not a valid option");
         }
@@ -29,17 +30,21 @@ public class ProducerService {
         String name = SCANNER.nextLine();
 
         List<Producer> producers = ProducerRepository.findByName(name);
-        for (int i = 0; i < producers.size() ; i++) {
-            Producer producer = producers.get(i);
-            System.out.printf("[%d] - %d | - %s%n", i, producer.getId(), producer.getName());
-        }
-
+        producers.forEach(p-> System.out.printf("[%d] | - %s%n", p.getId(), p.getName()));
     }
 
     private static void delete() {
         findByName();
         int digit = Integer.parseInt(SCANNER.nextLine());
         ProducerRepository.delete(digit);
+
+    }
+
+    private static void save() {
+        System.out.println("Digite o nome da nova produtora:");
+        String name = SCANNER.nextLine();
+        Producer build = Producer.builder().name(name).build();
+        ProducerRepository.savePreparedStatement(build);
 
     }
 }

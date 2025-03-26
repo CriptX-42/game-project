@@ -274,6 +274,7 @@ public class ProducerRepository {
         return callableStatement;
     }
 
+
     private static PreparedStatement updatePreparedStatementQuery(Connection connection, Producer producer) throws SQLException {
         String sql = "UPDATE `game_store`.`producer` SET `name` = ? WHERE (`id` = ?);\n".formatted(producer.getName(), producer.getId());
         PreparedStatement preparedStatement = connection.prepareStatement(sql);

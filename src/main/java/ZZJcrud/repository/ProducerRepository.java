@@ -51,4 +51,21 @@ public class ProducerRepository {
         preparedStatement.setInt(1,  id);
         return preparedStatement;
     }
+
+    public static void savePreparedStatement (Producer producer) {
+        try(Connection conn = ConnectionFactory.getConnection()) {
+            PreparedStatement preparedStatement = createPrepareStatement(conn, producer);
+           preparedStatement.execute();
+        }  catch (SQLException e) {
+            log.error("Erro ao tentar colocar a produtora '{}'", producer.getName(), e);
+        }
+
+    }
+
+    private static PreparedStatement createPrepareStatement(Connection connection, Producer producer) throws SQLException {
+        String sql = "INSERT INTO `game_store`.`producer` (`name`) VALUES (?);\n".formatted(producer.getName(), producer.getId());
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, producer.getName());
+        return preparedStatement;
+    }
 }

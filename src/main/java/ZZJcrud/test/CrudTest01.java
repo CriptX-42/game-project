@@ -19,5 +19,6 @@ public class CrudTest01 {
         System.out.println("Digite o numero da operação");
         System.out.println("1. Procurar produtora");
         System.out.println("2. Deletar produtora");
+        System.out.println("3. Inserir produtora");
     }
 }
