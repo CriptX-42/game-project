@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 @Log4j2
@@ -20,6 +21,7 @@ public class ProducerService {
             case 1: findByName(); break;
             case 2: delete();
             case 3: save();
+            case 4: update();
             default:
                 throw new IllegalArgumentException("Not a valid option");
         }
@@ -45,6 +47,25 @@ public class ProducerService {
         String name = SCANNER.nextLine();
         Producer build = Producer.builder().name(name).build();
         ProducerRepository.savePreparedStatement(build);
+
+    }
+
+    private static void update() {
+        System.out.println("Digite o id que do que você deseja atualizar:");
+        Optional<Producer> producerOptional = ProducerRepository.findById(Integer.parseInt(SCANNER.nextLine()));
+        if(producerOptional.isEmpty()){
+            System.out.println("Não encontrado");
+            return;
+        }
+        Producer producerFromDb = producerOptional.get();
+        System.out.println("Coloque um novo nome:");
+        String name = SCANNER.nextLine();
+        name = name.isEmpty() ? producerFromDb.getName() : name;
+
+        Producer build = Producer.builder().id(producerFromDb.getId()).name(name).build();
+
+        ProducerRepository.updatePreparedStatement(build);
+
 
     }
 }
