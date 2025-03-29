@@ -8,6 +8,6 @@ import lombok.Value;
 public class Game {
     Integer id;
     String name;
-    int episodes;
+    int duration;
     Producer producer;
 }
